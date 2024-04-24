@@ -65,6 +65,7 @@ def ShearBucklingGraph():
     fig, az = plt.subplots()
     az.plot(pos,T_cr)
     plt.show()
+
 #ShearBucklingGraph()
 
 
