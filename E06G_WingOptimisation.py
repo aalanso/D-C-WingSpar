@@ -22,18 +22,17 @@ def I_xx(z):
     I_reinforce = 0
     I_web = 0.8*(75**3)/12
     I_stringerVertical = 4 * ( (0.8*(20**3)/12 + 0.8*20*(0.8**2)) )
-    if z <= 500:
+    if z <= 750:
         I_reinforce = 0
         n = 2
-    elif 500< z <=1500:
+    elif 750< z <=1950:
         I_reinforce = 0
         n = 1
-    elif 1500 < z <= 2250:
+    elif 1950 < z <= 2250:
         n=0
         I_reinforce = ( (19.2)*(0.8**3)/12 + (19.2)*(0.8)  * ( (75-0.4)**2 )  ) *4
     for i in range(0,n):
-        I_reinforce += ( (19.2)*(0.8**3)/12 + (19.2)*(0.8)  * ( (75-0.4-1.8*i)**2 )  ) *4
-        
+        I_reinforce += ( (19.2)*(0.8**3)/12 + (19.2)*(0.8)  * ( (75-0.4-1.8*i)**2 )  ) *4 
     return I_reinforce+I_web+I_stringerVertical
 
 def totalMoment():
@@ -42,7 +41,6 @@ def totalMoment():
     for i in range(0,2250):
         moment.append(M(i))
         pos.append(i)
-
     fig, ax = plt.subplots()
     ax.plot(pos,moment)
     plt.show()
@@ -52,17 +50,14 @@ def totalMoment():
 
 def Bending():
     stress = []
-    x = []
+    pos = []
     for z in range(0,2250):
         stress.append(( 1000*M(z) * y ) / I_xx(z))
-        x.append(z)
-
+        pos.append(z)
     fig, az = plt.subplots()
-    az.plot(x,stress)
+    az.plot(pos,stress)
     plt.show()
 Bending()
-
-
 
 #def BoltSpacing():
 
