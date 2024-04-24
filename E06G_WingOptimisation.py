@@ -32,6 +32,9 @@ def I_xx(z):
         I_reinforce += ( (19.2)*(0.8**3)/12 + (19.2)*(0.8)  * ( (75-0.4-1.8*i)**2 )  ) *4
     return I_reinforce+I_web+I_stringerVertical
 
+def Q(z):
+    
+
 def totalMoment(z):
     moment = []
     z = []
