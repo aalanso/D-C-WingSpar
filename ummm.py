@@ -22,9 +22,9 @@ sf_bending = sf_buckling = 1.5
 def I_xx(z, n_reinf, reinf_lengths):
     I_res = 0
 
-    I_web = 0.8*(75**3)/12
-    I_stringer_vertical = 4 * ( (0.8*(20**3)/12 + 0.8*20*(65**2)) )
-    I_stringer_h = ((19.2) * (0.8 ** 3) / 12 + (19.2) * (0.8) * ((75 - 0.4) ** 2)) * 4
+    I_web = 0.8*(150**3)/12
+    I_stringer_vertical = 4 * ( (0.8*(20**3)/12 + 0.8*20*(65**2)))
+    I_stringer_h = ((18.5) * (1.5 ** 3) / 12 + (18.5) * (1.5) * ((75 - 0.75) ** 2)) * 4
     I_flanges = 2*(40.8*(0.8**3)/12 + 40.8*0.8*(75.4)**2)
 
     # print(I_web)
@@ -45,8 +45,8 @@ def I_xx(z, n_reinf, reinf_lengths):
 def Q_NA(z, n_reinf, reinf_lengths):
 
     Q_web = 0.8 * 75 * 37.5
-    Q_stringer_vertical = 2 * ((0.8 * (20 ** 3) / 12 + 0.8 * 20 * (0.8 ** 2)))
-    Q_stringer_h = (19.2 * 0.8 * 74.6 ) * 2
+    Q_stringer_vertical = 2 * (20 * 1.5 * 65)
+    Q_stringer_h = (18.5 * 1.5 * 74.25 ) * 2
     Q_flange = (40.8 * 0.8 * 75.6)
 
     Q_res = Q_web + Q_stringer_h + Q_stringer_vertical + Q_flange
