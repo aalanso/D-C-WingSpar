@@ -1,4 +1,19 @@
+import E06G_WingOptimisation as F
+
 bolt_tau_max = 311e6
+
+sigma_ult = 483e6
+sigma_y = 345e6
+E = 71.7e9
+rho = 2780
+
+K_s = 8.1
+
+
+# safety factors
+sf_bending = sf_buckling = 1.5
+
+
 
 # variables: 3 spacings, reinf 1 length,
 # other than that default config from manual
@@ -27,8 +42,41 @@ def I_xx(z, n_reinf, reinf_lengths):
 
 #print(I_xx(1000, 0, []))
 
+def Q_NA(z, n_reinf, reinf_lengths):
 
-#def eval_setup(spacing_1, spacing_2, spacing_3, reinf_1_len):
+    Q_web = 0.8 * 75 * 37.5
+    Q_stringer_vertical = 2 * ((0.8 * (20 ** 3) / 12 + 0.8 * 20 * (0.8 ** 2)))
+    Q_stringer_h = (19.2 * 0.8 * 74.6 ) * 2
+    Q_flange = (40.8 * 0.8 * 75.6)
+
+    Q_res = Q_web + Q_stringer_h + Q_stringer_vertical + Q_flange
+
+    for i in range(0, n_reinf):
+        if z < reinf_lengths[i]:
+            Q_res += (150-3*0.8) * 0.8 * (75-0.4-0.8*(i+1))
+
+    return Q_res  # mm3
+
+
+
+def eval_bending_stress(M_int, I_xx_mm4):
+    s = M_int * 75*1e-3/(I_xx_mm4*1e-12)
+    return s * sf_bending < sigma_y
+
+def eval_shear_buckling(V_int):
+    b = 110 # height-2*height_stringer (less strict on stringers)
+    t = 0.8
+    tau_crit = K_s * E * (t/b)**2
+    tau_int = V_int * Q_NA()
+    tau = VQ/It
+    return tau_crit * 1.5
+
+
+
+
+def eval_setup(spacing_1, spacing_2, spacing_3, reinf_1_len):
+
+
 
 # bending stress
 # shear buckling
