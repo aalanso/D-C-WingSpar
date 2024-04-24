@@ -46,14 +46,14 @@ def Q_NA(z, n_reinf, reinf_lengths):
 
     Q_web = 0.8 * 74.2 * 37.1
     Q_stringer_vertical = 2 * (20 * 1.5 * 64.2)
-    Q_stringer_h = (18.5 * 1.5 * (74.2-0.75) ) * 2
+    Q_stringer_h = (18.5 * 1.5 * (74.2-0.75)) * 2
     Q_flange = (40 * 0.8 * 74.6)
 
     Q_res = Q_web + Q_stringer_h + Q_stringer_vertical + Q_flange
 
     for i in range(0, n_reinf):
         if z < reinf_lengths[i]:
-            Q_res += (148.4-3*1.5) * 1.5 * (75-0.75-1.5*(i+1))
+            Q_res += (148.4-2*1.5-0.8) * 1.5 * (74.2-0.75/2-1.5*(i+1))
 
     return Q_res  # mm3
 
@@ -63,18 +63,20 @@ def eval_bending_stress(M_int, I_xx_mm4):
     s = M_int * 75*1e-3/(I_xx_mm4*1e-12)
     return s * sf_bending < sigma_y
 
-def eval_shear_buckling(V_int):
+def eval_shear_buckling(V_int, Q_mm3, I_xx_mm4):
     b = 110 # height-2*height_stringer (less strict on stringers)
     t = 0.8
     tau_crit = K_s * E * (t/b)**2
-    tau_int = V_int * Q_NA()
+    tau_int = V_int * Q_mm3 / (I_xx_mm4*1e-12)
+    print("tau int: ", tau_int)
     #tau = VQ/It
     return tau_crit * 1.5
 
+print("Q:", Q_NA(1000, 0, [])*1e-9)
 
 
-
-#def eval_setup(spacing_1, spacing_2, spacing_3, reinf_1_len):
+#eval_bending_stress(M(1),I_xx(1, 0, []))
+#eval_shear_buckling()
 
 
 
