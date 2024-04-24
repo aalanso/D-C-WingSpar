@@ -1,7 +1,7 @@
 import math
 import numpy
 import matplotlib.pyplot as plt
-
+mm = 1000
 M_A = 1108.394
 R_A = 1045.064
 R_B = 2075/3
@@ -22,45 +22,64 @@ def I_xx(z):
     I_reinforce = 0
     I_web = 0.8*(75**3)/12
     I_stringerVertical = 4 * ( (0.8*(20**3)/12 + 0.8*20*(0.8**2)) )
-    if z <= 500:
+    if z <= 750:
+        I_reinforce = 0
         n = 2
-    elif 500< z <=1500:
+    elif 750< z <=1950:
+        I_reinforce = 0
         n = 1
-    elif 1500 < z <= 2250:
+    elif 1950 < z <= 2250:
         n=0
+        I_reinforce = ( (19.2)*(0.8**3)/12 + (19.2)*(0.8)  * ( (75-0.4)**2 )  ) *4
     for i in range(0,n):
-        I_reinforce += ( (19.2)*(0.8**3)/12 + (19.2)*(0.8)  * ( (75-0.4-1.8*i)**2 )  ) *4
+        I_reinforce += ( (19.2)*(0.8**3)/12 + (19.2)*(0.8)  * ( (75-0.4-1.8*i)**2 )  ) *4 
     return I_reinforce+I_web+I_stringerVertical
 
-def Q(z):
-    
-
-def totalMoment(z):
+def totalMoment():
     moment = []
-    z = []
+    pos = []
     for i in range(0,2250):
         moment.append(M(i))
-        z.append(i)
-
+        pos.append(i)
     fig, ax = plt.subplots()
-    ax.plot(z,moment)
+    ax.plot(pos,moment)
     plt.show()
+
 #totalMoment()
-#def ShearBuckling():
+def ShearBuckling(z):
+    K = 5.1
+    b = 40/mm
+    E = 71700
+    #Thickness is a function of z position
+    if z<= 750:
+        t=0.8*3 /mm
+    elif 750<z<=1950:
+        t = 0.8*2 /mm
+    else:
+        t = 0.8 /mm
+    return K*E*(t/b)**2
+
+def ShearBucklingGraph():
+    T_cr = []
+    pos = []
+    for z in range(0,2250):
+        T_cr.append(ShearBuckling(z))
+        pos.append(z)
+    fig, az = plt.subplots()
+    az.plot(pos,T_cr)
+    plt.show()
+ShearBucklingGraph()
 
 def Bending():
     stress = []
-    x = []
+    pos = []
     for z in range(0,2250):
         stress.append(( 1000*M(z) * y ) / I_xx(z))
-        x.append(z)
-
+        pos.append(z)
     fig, az = plt.subplots()
-    az.plot(x,stress)
+    az.plot(pos,stress)
     plt.show()
-Bending()
-
-
+#Bending()
 
 #def BoltSpacing():
 
