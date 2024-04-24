@@ -68,13 +68,13 @@ def eval_shear_buckling(V_int):
     t = 0.8
     tau_crit = K_s * E * (t/b)**2
     tau_int = V_int * Q_NA()
-    tau = VQ/It
+    #tau = VQ/It
     return tau_crit * 1.5
 
 
 
 
-def eval_setup(spacing_1, spacing_2, spacing_3, reinf_1_len):
+#def eval_setup(spacing_1, spacing_2, spacing_3, reinf_1_len):
 
 
 
