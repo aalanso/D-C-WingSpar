@@ -1,7 +1,7 @@
 import math
 import numpy
 import matplotlib.pyplot as plt
-
+import ummm as thing
 mm = 1000
 M_A = 1108.394
 R_A = 1045.064
@@ -20,26 +20,6 @@ def M(z):
     elif 1950<z<=2250:
         return (R_A*(z) - R_B*(z - 750) - R_C*(z - 1950))/1000 - M_A
 
-def I_xx(z,ReinforceLength):
-
-    I_reinforce = 0
-    I_web = 0.8*(75**3)/12
-    I_stringerVertical = 4 * ( (0.8*(20**3)/12 + 0.8*20*(0.8**2)) )
-    I_plate = 2* ( (40.8*(0.8**3))/12 + (40.8*0.8*(75.4**2)))
-
-    #n represents number of reinforcements (where n=1 is the first layer)
-    if z < ReinforceLength:
-        n = 2
-    elif ReinforceLength <= z <= 2250:
-        n = 1
-    
-    for i in range(0,n):
-        I_reinforce += ( (19.2)*(0.8**3)/12 + (19.2)*(0.8)  * ( (75-0.4-1.8*(i-1))**2 )  ) *4 
-    
-    print("Web: " + str(I_web) + " || Stringer: " + str(I_stringerVertical) + " || plate: " + str(I_plate) + " || Horizontal things: " + str(I_reinforce))
-
-    return I_reinforce+I_web+I_stringerVertical + I_plate
-
 def totalMoment():
     moment = []
     pos = []
@@ -55,12 +35,12 @@ def Bending():
     pos = []
     #RL is reinforcement length
     for z in range(0,2250):
-        stress.append(( 1000*M(z) * y ) / I_xx(z,RL))
+        stress.append(( 1000*M(z) * y ) / thing.I_xx(z, 1, [900]))
         pos.append(z)
     fig, az = plt.subplots()
     az.plot(pos,stress)
     plt.show()
-#Bending()
+Bending()
 
 #totalMoment()
 def ShearBuckling(z,ReinforceLength):
