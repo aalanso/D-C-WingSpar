@@ -1,7 +1,7 @@
 import math
 import numpy
 import matplotlib.pyplot as plt
-import ummm as thing
+import ummm as A
 mm = 1000
 M_A = 1108.394
 R_A = 1045.064
@@ -35,12 +35,12 @@ def Bending():
     pos = []
     #RL is reinforcement length
     for z in range(0,2250):
-        stress.append(( 1000*M(z) * y ) / thing.I_xx(z, 1, [900]))
+        stress.append(( 1000*M(z) * y ) / A.I_xx(z, 1, [900]))
         pos.append(z)
     fig, az = plt.subplots()
     az.plot(pos,stress)
     plt.show()
-Bending()
+#Bending()
 
 #totalMoment()
 def ShearBuckling(z,ReinforceLength):
@@ -68,14 +68,14 @@ def ShearBucklingGraph():
 #ShearBucklingGraph()
 
 def shearStress():
-    t = 1.5/mm
+    t = 1.5
     V = 1045
     tau = []
     pos = []
     for z in range(0,2250):
-        tau.append(V*thing.Q_NA(z,1,[900]) / t*thing.I_xx(z,1,[900]))
-        pos.append[z]
+        tau.append((V*A.Q_NA(z,1,[900])) / (t * A.I_xx(z,1,[900])))
+        pos.append(z)
     fig, az = plt.subplots()
     az.plot(pos,tau)
     plt.show()
-    shearStress()
+shearStress()

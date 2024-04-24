@@ -1,4 +1,4 @@
-import E06G_WingOptimisation as F
+#import E06G_WingOptimisation as F
 
 bolt_tau_max = 311e6
 
