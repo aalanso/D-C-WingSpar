@@ -4,8 +4,8 @@ import matplotlib.pyplot as plt
 mm = 1000
 M_A = 1108.394
 R_A = 1045.064
-R_B = 2035/6
-R_C = 4565/6
+R_B = 2035/6 #339.2N
+R_C = 4565/6 #760.8N
 R_D = 5.6*9.81
 
 y = 75/2
