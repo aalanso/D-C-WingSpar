@@ -1,7 +1,7 @@
 import math
 import numpy
 import matplotlib.pyplot as plt
-
+mm = 1000
 M_A = 1108.394
 R_A = 1045.064
 R_B = 2075/3
@@ -46,7 +46,29 @@ def totalMoment():
     plt.show()
 
 #totalMoment()
-#def ShearBuckling():
+def ShearBuckling(z):
+    K = 5.1
+    b = 40/mm
+    E = 71700
+    #Thickness is a function of z position
+    if z<= 750:
+        t=0.8*3 /mm
+    elif 750<z<=1950:
+        t = 0.8*2 /mm
+    else:
+        t = 0.8 /mm
+    return K*E*(t/b)**2
+
+def ShearBucklingGraph():
+    T_cr = []
+    pos = []
+    for z in range(0,2250):
+        T_cr.append(ShearBuckling(z))
+        pos.append(z)
+    fig, az = plt.subplots()
+    az.plot(pos,T_cr)
+    plt.show()
+ShearBucklingGraph()
 
 def Bending():
     stress = []
@@ -57,7 +79,7 @@ def Bending():
     fig, az = plt.subplots()
     az.plot(pos,stress)
     plt.show()
-Bending()
+#Bending()
 
 #def BoltSpacing():
 
