@@ -9,6 +9,7 @@ R_C = 4565/6 #760.8N
 R_D = 5.6*9.81
 
 y = 75/2
+RL = 900
 
 def M(z): 
     if 0<=z<=750:
@@ -24,6 +25,7 @@ def I_xx(z,ReinforceLength):
     I_web = 0.8*(75**3)/12
     I_stringerVertical = 4 * ( (0.8*(20**3)/12 + 0.8*20*(0.8**2)) )
 
+    #n represents number of reinforcements (where n=1 is the first layer)
     if z <= ReinforceLength:
         n = 2
     elif ReinforceLength < z <= 2250:
@@ -47,7 +49,7 @@ def totalMoment():
 def Bending():
     stress = []
     pos = []
-    RL = 900
+    #RL is reinforcement length
     for z in range(0,2250):
         stress.append(( 1000*M(z) * y ) / I_xx(z,RL))
         pos.append(z)
@@ -57,29 +59,29 @@ def Bending():
 Bending()
 
 #totalMoment()
-def ShearBuckling(z):
+def ShearBuckling(z,ReinforceLength):
     K = 8.1
     b = 40/mm
     E = 71700
     #Thickness is a function of z position
-    if z<= 750:
-        t=0.8*3 /mm
-    elif 750<z<=1950:
-        t = 0.8*2 /mm
-    else:
+    if z<= ReinforceLength:
+        t=0.8*2 /mm
+    elif ReinforceLength<z<=2250:
         t = 0.8 /mm
     return K*E*(t/b)**2
 
 def ShearBucklingGraph():
+    #Critical Tau
     T_cr = []
     pos = []
+    
     for z in range(0,2250):
-        T_cr.append(ShearBuckling(z))
+        T_cr.append(ShearBuckling(z,RL))
         pos.append(z)
     fig, az = plt.subplots()
     az.plot(pos,T_cr)
     plt.show()
-#ShearBucklingGraph()
+ShearBucklingGraph()
 
 
 
