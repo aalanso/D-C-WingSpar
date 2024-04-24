@@ -65,12 +65,17 @@ def ShearBucklingGraph():
     fig, az = plt.subplots()
     az.plot(pos,T_cr)
     plt.show()
-
 #ShearBucklingGraph()
 
-
-
-#def BoltSpacing():
-
-
-#def interRivetBuckling();
+def shearStress():
+    t = 1.5/mm
+    V = 1045
+    tau = []
+    pos = []
+    for z in range(0,2250):
+        tau.append(V*thing.Q_NA(z,1,[900]) / t*thing.I_xx(z,1,[900]))
+        pos.append[z]
+    fig, az = plt.subplots()
+    az.plot(pos,tau)
+    plt.show()
+    shearStress()
