@@ -4,8 +4,8 @@ import matplotlib.pyplot as plt
 mm = 1000
 M_A = 1108.394
 R_A = 1045.064
-R_B = 20
-R_C = 925/3
+R_B = 2035/6
+R_C = 4565/6
 R_D = 5.6*9.81
 
 y = 75/2
@@ -24,13 +24,13 @@ def I_xx(z,ReinforceLength):
     I_web = 0.8*(75**3)/12
     I_stringerVertical = 4 * ( (0.8*(20**3)/12 + 0.8*20*(0.8**2)) )
 
-    if z <=ReinforceLength:
-        n = 1
+    if z <= ReinforceLength:
+        n = 2
     elif ReinforceLength < z <= 2250:
-        n = 0
+        n = 1
     
     for i in range(0,n):
-        I_reinforce += ( (19.2)*(0.8**3)/12 + (19.2)*(0.8)  * ( (75-0.4-1.8*i)**2 )  ) *4 
+        I_reinforce += ( (19.2)*(0.8**3)/12 + (19.2)*(0.8)  * ( (75-0.4-1.8*(i-1))**2 )  ) *4 
 
     return I_reinforce+I_web+I_stringerVertical
 
@@ -48,12 +48,9 @@ def Bending():
     stress = []
     pos = []
     RL = 900
-    for step in range(1,10):
-        for z in range(0,2250):
-            stress.append(( 1000*M(z) * y ) / I_xx(z,RL+step*50))
-            pos.append(z)
-            if ( 1000*M(z) * y ) / I_xx(z,RL+step*50) <230:
-                print("Over 230MPa at " + str(z) + "mm, and step = " + str(step))
+    for z in range(0,2250):
+        stress.append(( 1000*M(z) * y ) / I_xx(z,RL))
+        pos.append(z)
     fig, az = plt.subplots()
     az.plot(pos,stress)
     plt.show()
