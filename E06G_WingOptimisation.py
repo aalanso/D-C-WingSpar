@@ -14,11 +14,11 @@ RL = 900
 
 def M(z): 
     if 0<=z<=750:
-        return (R_A*(z))/1000 - M_A
+        return (R_A*(z))/mm - M_A
     elif 750<z<=1950:
-        return (R_A*(z) - R_B*(z - 750))/1000 - M_A
+        return (R_A*(z) - R_B*(z - 750))/mm - M_A
     elif 1950<z<=2250:
-        return (R_A*(z) - R_B*(z - 750) - R_C*(z - 1950))/1000 - M_A
+        return (R_A*(z) - R_B*(z - 750) - R_C*(z - 1950))/mm - M_A
 
 def totalMoment():
     moment = []
@@ -33,14 +33,14 @@ def totalMoment():
 def Bending():
     stress = []
     pos = []
-    #RL is reinforcement length
+    #RL is reinforcement length, 300mm seems to be best?
     for z in range(0,2250):
-        stress.append(( 1000*M(z) * y ) / A.I_xx(z, 1, [900]))
+        stress.append(( 1000*M(z) * y ) / A.I_xx(z, 1, [300]))
         pos.append(z)
     fig, az = plt.subplots()
     az.plot(pos,stress)
     plt.show()
-#Bending()
+Bending()
 
 #totalMoment()
 def ShearBuckling(z,ReinforceLength):
@@ -78,4 +78,4 @@ def shearStress():
     fig, az = plt.subplots()
     az.plot(pos,tau)
     plt.show()
-shearStress()
+#shearStress()
