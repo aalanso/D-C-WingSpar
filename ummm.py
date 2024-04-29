@@ -4,11 +4,11 @@ bolt_tau_max = 311e6
 
 sigma_ult = 483e6
 sigma_y = 345e6
-E = 71.7e9
-rho = 2780
+E = 71.7e9 
+rho = 2780 #kg/m^3
 
 K_s = 8.1
-
+mm = 1/1000
 
 # safety factors
 sf_bending = sf_buckling = 1.5
@@ -18,6 +18,19 @@ sf_bending = sf_buckling = 1.5
 # variables: 3 spacings, reinf 1 length,
 # other than that default config from manual
 
+def mass(no_reinf, reinf_len):
+    volume_f = 2*40*0.8*2250 * (mm)**3 #mm**3 is for unit conversion to meters^3
+    volume_w = 0.8*148.4*2250 *(mm)**3
+    volume_sv = 4*1.5*20*2250 * (mm)**3
+    volume_sh = 4*18.5*1.5 * (mm)**3
+    volume_tot = volume_f+volume_sh+volume_sv+volume_w
+    for i in  range(no_reinf):
+        volume_tot += 4*18.5*1.5*reinf_len[i] * (mm)**3 
+    return volume_tot
+
+print(mass(1, [900]))
+print(mass(1, [900]) * rho)
+
 # z in cm, reinf_lengths in cm as well
 def I_xx(z, n_reinf, reinf_lengths):
     I_res = 0
@@ -26,11 +39,6 @@ def I_xx(z, n_reinf, reinf_lengths):
     I_stringer_vertical = 4 * ( (1.5*(20**3)/12 + 1.5*20*(64.2**2)))
     I_stringer_h = ((18.5) * (1.5 ** 3) / 12 + (18.5) * (1.5) * ((74.2 - 0.75) ** 2)) * 4
     I_flanges = 2*(40*(0.8**3)/12 + 40*0.8*(74.6)**2)
-
-    # print(I_web)
-    # print(I_stringer_vertical)
-    # print(I_stringer_h)
-    # print(I_flanges)
 
     I_res = I_web + I_stringer_h + I_stringer_vertical + I_flanges
 
@@ -75,15 +83,14 @@ def eval_shear_buckling(V_int, Q_mm3, I_xx_mm4):
     return tau_crit
 
 
-
+'''
 print("Q:", Q_NA(1000, 0, [])*1e-9)
 
 for z in range(0, 1000):
     tau_crit = eval_shear_buckling(1, Q_NA(1, 0, []), I_xx(1, 0, []))
 
 print(eval_shear_buckling(1, Q_NA(1, 0, []), I_xx(1, 0, [])))
-
-
+'''
 
 #eval_bending_stress(M(1),I_xx(1, 0, []))
 #eval_shear_buckling()
