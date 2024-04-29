@@ -25,8 +25,8 @@ def mass(no_reinf, reinf_len):
     for i in  range(no_reinf): volume_tot += 4*18.5*1.5*reinf_len[i] * (mm)**3 
     return volume_tot
 
-print(mass(1, [900]))
-print(mass(1, [900]) * rho)
+#print(mass(1, [900]))
+#print(mass(1, [900]) * rho)
 
 # z in cm, reinf_lengths in cm as well
 def I_xx(z, n_reinf, reinf_lengths):
