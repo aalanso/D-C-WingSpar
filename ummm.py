@@ -97,15 +97,16 @@ def Q_NA(z, n_reinf, reinf_lengths):
 
 
 def Q_Bolt(z, n_reinf, reinf_lengths):
-    if n > 1:
-        for i in range(0, n_reinf):
-            if z > reinf_lengths[i]:
-                n_reinf -= 1
-                Q_Bolt_Res = (((150-(0.8+1.5*(n_reinf-1))/(2))*(148.4*0.8+1.5*(n_reinf-1))))
-    elif n == 1:
-        Q_Bolt_Res = (((150 - (0.8)/ (2)) * (148.4 * 0.8)))
-    else:
-        print("invalid amount of reinforcements")
+    for n in range(0, n_reinf):
+        if n > 1:
+            for i in range(0, n_reinf):
+                if z > reinf_lengths[i]:
+                    n_reinf -= 1
+                    Q_Bolt_Res = (((150-(0.8+1.5*(n_reinf-1))/(2))*(148.4*0.8+1.5*(n_reinf-1))))
+        elif n == 1:
+            Q_Bolt_Res = (((150 - (0.8)/ (2)) * (148.4 * 0.8)))
+        else:
+            print("invalid amount of reinforcements")
 
 
 
