@@ -56,7 +56,7 @@ def mass(no_reinf, reinf_len):
     volume_sh = 4*18.5*1.5 * (mm)**3
     volume_tot = volume_f+volume_sh+volume_sv+volume_w
     for i in  range(no_reinf): volume_tot += 4*18.5*0.8*reinf_len[i] * (mm)**3 
-    return volume_tot
+    return volume_tot*rho
 
 #print(mass(1, [900]))
 #print(mass(1, [900]) * rho)

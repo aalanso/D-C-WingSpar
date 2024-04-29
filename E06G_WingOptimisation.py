@@ -3,28 +3,24 @@ import numpy
 import matplotlib.pyplot as plt
 import ummm as A
 mm = 1000
-M_A = 1108.394
+M_A = 1108.394 #Nm
 R_A = 1045.064
 R_B = 2035/6 #339.2N
 R_C = 4565/6 #760.8N
 R_D = 5.6*9.81
 
-y = 75/2
+y = 75
 RL = 900
-
-
 
 def V(z):
     if 0<=z<=750: return R_A
     elif 750<z<=1950: return R_A - R_B
     elif 1950<z<=2250: return R_A - R_B - R_C
 
-
-
 def M(z): 
-    if 0<=z<=750: return (R_A*(z))/mm - M_A
-    elif 750<z<=1950: return (R_A*(z) - R_B*(z - 750))/mm - M_A
-    elif 1950<z<=2250: return (R_A*(z) - R_B*(z - 750) - R_C*(z - 1950))/mm - M_A
+    if 0<=z<=750: return (  R_A*(z)  )/mm - M_A
+    elif 750<z<=1950: return (  R_A*(z) - R_B*(z - 750)  )/mm - M_A
+    elif 1950<z<=2250: return (  R_A*(z) - R_B*(z - 750) - R_C*(z - 1950)  )/mm - M_A
 
 def totalMoment():
     moment = []
@@ -41,12 +37,12 @@ def Bending():
     pos = []
     #RL is reinforcement length, 300mm seems to be best?
     for z in range(0,2250):
-        stress.append(( 1000*M(z) * y ) / A.I_xx(z, 1, [300]))
+        stress.append( ( 1000 * M(z) * y ) / A.I_xx(z, 1, [300]) )
         pos.append(z)
     fig, az = plt.subplots()
     az.plot(pos,stress)
     plt.show()
-#Bending()
+Bending()
 
 #totalMoment()
 def ShearBuckling(z,ReinforceLength):
@@ -74,7 +70,7 @@ def ShearBucklingGraph():
 #ShearBucklingGraph()
 
 def shearStress_NA():
-    t = 1.5
+    t = 0.8
     tau = []
     pos = []
     for z in range(0,2250):
@@ -83,11 +79,11 @@ def shearStress_NA():
     fig, az = plt.subplots()
     az.plot(pos,tau)
     plt.show()
-shearStress_NA()
+#shearStress_NA()
 
 
 def shearStress_Bolts():
-    t = 1.5
+    t = 0.8
     tau = []
     pos = []
     for z in range(0,2250):
