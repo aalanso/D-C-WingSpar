@@ -1,5 +1,5 @@
-#import E06G_WingOptimisation as F
-
+# import E06G_WingOptimisation as F
+import matplotlib.pyplot as plt
 bolt_tau_max = 311e6
 
 sigma_ult = 483e6
@@ -9,9 +9,42 @@ rho = 2780
 
 K_s = 8.1
 
+# ========= stolen
+mm = 1000
+M_A = 1108.394
+R_A = 1045.064
+R_B = 2035 / 6  # 339.2N
+R_C = 4565 / 6  # 760.8N
+R_D = 5.6 * 9.81
+
+y = 75 / 2
+RL = 900
+
+
+def V(z):
+    if 0 <= z <= 750:
+        return R_A
+    elif 750 < z <= 1950:
+        return R_A - R_B
+    elif 1950 < z <= 2250:
+        return R_A - R_B - R_C
+
+
+def M(z):
+    if 0 <= z <= 750:
+        return (R_A * (z)) / mm - M_A
+    elif 750 < z <= 1950:
+        return (R_A * (z) - R_B * (z - 750)) / mm - M_A
+    elif 1950 < z <= 2250:
+        return (R_A * (z) - R_B * (z - 750) - R_C * (z - 1950)) / mm - M_A
+
+
+# =======
+
 
 # safety factors
 sf_bending = sf_buckling = 1.5
+
 
 # variables: 3 spacings, reinf 1 length,
 # other than that default config from manual
@@ -20,10 +53,10 @@ sf_bending = sf_buckling = 1.5
 def I_xx(z, n_reinf, reinf_lengths):
     I_res = 0
 
-    I_web = 0.8*(148.4**3)/12
-    I_stringer_vertical = 4 * ( (1.5*(20**3)/12 + 1.5*20*(64.2**2)))
+    I_web = 0.8 * (148.4 ** 3) / 12
+    I_stringer_vertical = 4 * ((1.5 * (20 ** 3) / 12 + 1.5 * 20 * (64.2 ** 2)))
     I_stringer_h = ((18.5) * (1.5 ** 3) / 12 + (18.5) * (1.5) * ((74.2 - 0.75) ** 2)) * 4
-    I_flanges = 2*(40*(0.8**3)/12 + 40*0.8*(74.6)**2)
+    I_flanges = 2 * (40 * (0.8 ** 3) / 12 + 40 * 0.8 * (74.6) ** 2)
 
     # print(I_web)
     # print(I_stringer_vertical)
@@ -34,60 +67,60 @@ def I_xx(z, n_reinf, reinf_lengths):
 
     for i in range(0, n_reinf):
         if z < reinf_lengths[i]:
-            I_res += ( (18.5)*(1.5**3)/12 + (18.5)*(1.5) * ((74.2-0.75-1.5*(i+1))**2)) *4
+            I_res += ((18.5) * (1.5 ** 3) / 12 + (18.5) * (1.5) * ((74.2 - 0.75 - 1.5 * (i + 1)) ** 2)) * 4
 
-    return I_res # mm4
+    return I_res  # mm4
 
-#print(I_xx(1000, 0, []))
+
+# print(I_xx(1000, 0, []))
 
 def Q_NA(z, n_reinf, reinf_lengths):
-
     Q_web = 0.8 * 74.2 * 37.1
     Q_stringer_vertical = 2 * (20 * 1.5 * 64.2)
-    Q_stringer_h = (18.5 * 1.5 * (74.2-0.75)) * 2
+    Q_stringer_h = (18.5 * 1.5 * (74.2 - 0.75)) * 2
     Q_flange = (40 * 0.8 * 74.6)
 
     Q_res = Q_web + Q_stringer_h + Q_stringer_vertical + Q_flange
 
     for i in range(0, n_reinf):
         if z < reinf_lengths[i]:
-            Q_res += (148.4-2*1.5-0.8) * 1.5 * (74.2-0.75/2-1.5*(i+1))
+            Q_res += 2 * ((74.2 - 1.5 - 0.4 - 0.8 * i) * (18.5 * 0.8))
 
     return Q_res  # mm3
 
+
 def Q_Bolt(z, n_reinf, reinf_lengths):
     for k in range(0, n_reinf):
-        Q_Bolt_Reinf = (((150-(0.8+1.5*k))/(2))*(148.4*0.8+1.5*k))
+        Q_Bolt_Reinf = (((150 - (0.8 + 1.5 * k)) / (2)) * (148.4 * 0.8 + 1.5 * k))
+
 
 def get_bending_stress(M_int, I_xx_mm4):
-    s = M_int * 75*1e-3/(I_xx_mm4*1e-12)
+    s = M_int * 75 * 1e-3 / (I_xx_mm4 * 1e-12)
     return s
 
+
 def get_shear_buckling(V_int, Q_mm3, I_xx_mm4):
-    b = 110 # height-2*height_stringer (less strict on stringers)
+    b = 108.4  # height-2*height_stringer (less strict on stringers)
     t = 0.8
-    tau_crit = K_s * E * (t/b)**2
-    tau_int = (V_int * Q_mm3 / (I_xx_mm4 * 0.8))*1e6
-    print("tau int: ", tau_int)
-    #tau = VQ/It
+    tau_crit = K_s * E * (t / b) ** 2
+    tau_int = (V_int * Q_mm3 / (I_xx_mm4 * 0.8)) * 1e6
+    # tau = VQ/It
     return tau_crit
 
-# at root V_int1045
 
-# print("Q:", Q_NA(1000, 0, [])*1e-9)
-
-print(get_shear_buckling(1045, Q_NA(1, 0, []), I_xx(1, 0, [])))
+def get_tau_int(z):
+    print(get_shear_buckling(1045, Q_NA(1, 0, []), I_xx(1, 0, [])))
 
 
+tau_int = []
+sigma_bending = []
+zz = range(0, 1000)
 
+for z in range(0, 1000):
+    I_here = I_xx(z, 0, [])
+    tau_int.append(get_shear_buckling(V(z), Q_NA(z, 0, []), I_here))
+    sigma_bending.append(get_bending_stress(M(z), I_here))
 
-#eval_bending_stress(M(1),I_xx(1, 0, []))
-#eval_shear_buckling()
-
-
-
-# bending stress
-# shear buckling
-#
-
-
+fig, ax = plt.subplots()
+ax.plot(tau_int, sigma_bending)
+plt.show()

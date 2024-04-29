@@ -96,7 +96,3 @@ def shearStress_Bolts():
     fig, az = plt.subplots()
     az.plot(pos,tau)
     plt.show()
-
-tc = []
-for z in range(0, 1000):
-     tc.append(A.get_shear_buckling(1, A.Q_NA(1, 0, []), I_xx(1, 0, [])))
