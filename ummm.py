@@ -127,19 +127,15 @@ def get_shear_buckling(V_int, Q_mm3, I_xx_mm4):
     return tau_crit
 
 
-def get_tau_int(z):
-    print(get_shear_buckling(1045, Q_NA(1, 0, []), I_xx(1, 0, [])))
-
-
 tau_int = []
 sigma_bending = []
-zz = range(0, 1000)
+zz = range(0, 2250)
 
-for z in range(0, 1000):
+for z in range(0, 2250):
     I_here = I_xx(z, 0, [])
-    tau_int.append(get_shear_buckling(V(z), Q_NA(z, 0, []), I_here))
-    sigma_bending.append(get_bending_stress(M(z), I_here))
+    tau_int.append(V(z) * Q_NA(z, 0, []) / (I_here * 0.8))
+    #sigma_bending.append(get_bending_stress(M(z), I_here))
 
 fig, ax = plt.subplots()
-ax.plot(tau_int, sigma_bending)
+ax.plot(tau_int)
 plt.show()
