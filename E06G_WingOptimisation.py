@@ -74,7 +74,7 @@ def ShearBucklingGraph():
 #ShearBucklingGraph()
 
 def shearStress_NA():
-    t = 1.5
+    t = 0.8
     tau = []
     pos = []
     for z in range(0,2250):
@@ -87,7 +87,7 @@ shearStress_NA()
 
 
 def shearStress_Bolts():
-    t = 1.5
+    t = 0.8
     tau = []
     pos = []
     for z in range(0,2250):
