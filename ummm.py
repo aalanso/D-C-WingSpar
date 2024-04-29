@@ -22,7 +22,7 @@ def mass(no_reinf, reinf_len):
     volume_sv = 4*1.5*20*2250 * (mm)**3
     volume_sh = 4*18.5*1.5 * (mm)**3
     volume_tot = volume_f+volume_sh+volume_sv+volume_w
-    for i in  range(no_reinf): volume_tot += 4*18.5*1.5*reinf_len[i] * (mm)**3 
+    for i in  range(no_reinf): volume_tot += 4*18.5*0.8*reinf_len[i] * (mm)**3 
     return volume_tot
 
 #print(mass(1, [900]))
@@ -41,7 +41,7 @@ def I_xx(z, n_reinf, reinf_lengths):
 
     for i in range(0, n_reinf):
         if z < reinf_lengths[i]:
-            I_res += ( (18.5)*(1.5**3)/12 + (18.5)*(1.5) * ((74.2-0.75-1.5*(i+1))**2)) *4
+            I_res += ( (18.5)*(0.8**3)/12 + (18.5)*(0.8) * ((74.2-0.75-0.8*(i+1))**2)) *4
 
     return I_res # mm4
 
