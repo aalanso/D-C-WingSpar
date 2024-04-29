@@ -127,15 +127,45 @@ def get_shear_buckling(V_int, Q_mm3, I_xx_mm4):
     return tau_crit
 
 
-tau_int = []
-sigma_bending = []
-zz = range(0, 2250)
 
-for z in range(0, 2250):
-    I_here = I_xx(z, 0, [])
-    tau_int.append(V(z) * Q_NA(z, 0, []) / (I_here * 0.8))
-    #sigma_bending.append(get_bending_stress(M(z), I_here))
+def eval_setup(n_reinf, reinf_lengths):
+    tau_int = []
+    sigma_bending = []
+    I = []
+    Q = []
 
-fig, ax = plt.subplots()
-ax.plot(tau_int)
-plt.show()
+    for z in range(0, 2250):
+        I_here = I_xx(z, n_reinf, reinf_lengths)
+        Q_here = Q_NA(z, n_reinf, reinf_lengths)
+        tau_int.append(V(z) * Q_here * 1e6 / (I_here * 0.8))
+        sigma_bending.append(get_bending_stress(M(z), I_here))
+        I.append(I_here)
+        Q.append(Q_here)
+
+
+    print("Max bending stress: {}".format(max(sigma_bending)))
+    print("Max internal shear stress: {}".format(max(tau_int)))
+
+    fig, ax = plt.subplots()
+    ax.plot(tau_int)
+    plt.ylabel("Tau Internal")
+    plt.show()
+
+    fig, ax = plt.subplots()
+    ax.plot(sigma_bending)
+    plt.ylabel("Sigma Bending")
+    plt.show()
+
+    fig, ax = plt.subplots()
+    ax.plot(I)
+    plt.ylabel("I_xx [mm4]")
+    plt.show()
+
+    fig, ax = plt.subplots()
+    ax.plot(Q)
+    plt.ylabel("Q_NA [mm3]")
+    plt.show()
+
+eval_setup(0, [])
+
+
