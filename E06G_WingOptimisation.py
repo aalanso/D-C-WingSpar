@@ -19,6 +19,8 @@ def V(z):
     elif 750<z<=1950: return R_A - R_B
     elif 1950<z<=2250: return R_A - R_B - R_C
 
+
+
 def M(z): 
     if 0<=z<=750: return (R_A*(z))/mm - M_A
     elif 750<z<=1950: return (R_A*(z) - R_B*(z - 750))/mm - M_A
@@ -94,3 +96,7 @@ def shearStress_Bolts():
     fig, az = plt.subplots()
     az.plot(pos,tau)
     plt.show()
+
+tc = []
+for z in range(0, 1000):
+     tc.append(A.get_shear_buckling(1, A.Q_NA(1, 0, []), I_xx(1, 0, [])))

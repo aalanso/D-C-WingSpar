@@ -72,13 +72,11 @@ def get_shear_buckling(V_int, Q_mm3, I_xx_mm4):
     #tau = VQ/It
     return tau_crit
 
+# at root V_int1045
 
-print("Q:", Q_NA(1000, 0, [])*1e-9)
+# print("Q:", Q_NA(1000, 0, [])*1e-9)
 
-for z in range(0, 1000):
-    tau_crit = get_shear_buckling(1, Q_NA(1, 0, []), I_xx(1, 0, []))
-
-print(get_shear_buckling(1, Q_NA(1, 0, []), I_xx(1, 0, [])))
+print(get_shear_buckling(1045, Q_NA(1, 0, []), I_xx(1, 0, [])))
 
 
 
