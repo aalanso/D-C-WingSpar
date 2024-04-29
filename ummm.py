@@ -61,7 +61,6 @@ def Q_Bolt(z, n_reinf, reinf_lengths):
     for k in range(0, n_reinf):
         Q_Bolt_Reinf = (((150-(0.8+1.5*k))/(2))*(148.4*0.8+1.5*k))
 
-
 def eval_bending_stress(M_int, I_xx_mm4):
     s = M_int * 75*1e-3/(I_xx_mm4*1e-12)
     return s * sf_bending < sigma_y
@@ -70,12 +69,20 @@ def eval_shear_buckling(V_int, Q_mm3, I_xx_mm4):
     b = 110 # height-2*height_stringer (less strict on stringers)
     t = 0.8
     tau_crit = K_s * E * (t/b)**2
-    tau_int = V_int * Q_mm3 / (I_xx_mm4*1e-12)
+    tau_int = (V_int * Q_mm3 / (I_xx_mm4 * 0.8))*1e6
     print("tau int: ", tau_int)
     #tau = VQ/It
-    return tau_crit * 1.5
+    return tau_crit
+
+
 
 print("Q:", Q_NA(1000, 0, [])*1e-9)
+
+for z in range(0, 1000):
+    tau_crit = eval_shear_buckling(1, Q_NA(1, 0, []), I_xx(1, 0, []))
+
+print(eval_shear_buckling(1, Q_NA(1, 0, []), I_xx(1, 0, [])))
+
 
 
 #eval_bending_stress(M(1),I_xx(1, 0, []))
