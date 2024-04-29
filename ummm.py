@@ -57,6 +57,9 @@ def Q_NA(z, n_reinf, reinf_lengths):
 
     return Q_res  # mm3
 
+def Q_Bolt(z, n_reinf, reinf_lengths):
+    for k in range(0, n_reinf):
+        Q_Bolt_Reinf = (((150-(0.8+1.5*k))/(2))*(148.4*0.8+1.5*k))
 
 def eval_bending_stress(M_int, I_xx_mm4):
     s = M_int * 75*1e-3/(I_xx_mm4*1e-12)
