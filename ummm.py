@@ -169,3 +169,18 @@ def eval_setup(n_reinf, reinf_lengths):
 eval_setup(0, [])
 
 
+F_max_bolt = bolt_tau_max * 0.25*3.14159*(0.004**2)
+qqq = 40.8*0.8*74.6
+s_max_mm = 2 * F_max_bolt * I_xx(1, 0,[]) / (V(1) * qqq)
+print("F_max_bolt [N]: {}".format(F_max_bolt))
+print("Q: {} [mm3]".format(qqq))
+print("I_xx [mm4]: {}".format(I_xx(1, 0,[])))
+print("V_int [N]: {}".format(V(1)))
+print("s_max [mm]: {}".format(s_max_mm))
+
+
+s_max_irb = 0.8 * ( ( -(0.9*2.1*E) / get_bending_stress(M(1), I_xx(1, 0, [])) )**0.5)
+print("s_max_irb: {}".format(s_max_irb))
+
+# how do we find shear flow and the bolt spacing on the web-stringer interface?
+# it it gonna be more restrictive than the spacing for the top plate
