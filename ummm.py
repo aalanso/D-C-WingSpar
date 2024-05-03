@@ -46,16 +46,18 @@ mm = 1/1000
 sf_bending = sf_buckling = 1.5
 
 
-# variables: 3 spacings, reinf 1 length,
-# other than that default config from manual
+# 50cm of no flanges saves ~90g
 
-def mass(no_reinf, reinf_len):
-    volume_f = 2*40*0.8*2250 * (mm)**3 #mm**3 is for unit conversion to meters^3
+
+def mass(no_reinf, reinf_len, no_flange_len_mm, n_bolts):
+    volume_f = 2*40.8*0.8*(2250-no_flange_len_mm) * (mm)**3 #mm**3 is for unit conversion to meters^3
     volume_w = 0.8*148.4*2250 *(mm)**3
     volume_sv = 4*1.5*20*2250 * (mm)**3
-    volume_sh = 4*18.5*1.5 * (mm)**3
+    volume_sh = 4*18.5*1.5*2250 * (mm)**3
+    # this overestimates wrt masses from reader by around 5%
     volume_tot = volume_f+volume_sh+volume_sv+volume_w
-    for i in  range(no_reinf): volume_tot += 4*18.5*0.8*reinf_len[i] * (mm)**3 
+    volume_tot += n_bolts * 0.00139
+    for i in  range(no_reinf): volume_tot += 4*18.5*0.8*reinf_len[i] * (mm)**3
     return volume_tot*rho
 
 #print(mass(1, [900]))
@@ -182,9 +184,9 @@ print("V_int [N]: {}".format(V(1)))
 s_max_irb = 0.8 * ( ( -(0.9*2.1*E) / get_bending_stress(M(1), I_xx(1, 0, [])) )**0.5)
 print("s_max_irb: [mm] {}".format(s_max_irb))
 
-# how do we find shear flow and the bolt spacing on the web-stringer interface?
-# it it gonna be more restrictive than the spacing for the top plate
 def get_normal_flow_spacing(z):
+    sm = M(z)*75/I_xx(z, 0, [])
+    print(sm)
     qs = M(z)*74.2*20/I_xx(z, 0, [])
     qp = M(z)*75*20/I_xx(z, 0, [])
     dq = qs - qp
@@ -195,3 +197,6 @@ def get_normal_flow_spacing(z):
 
 
 print(get_normal_flow_spacing(1))
+
+print(mass(0, [], 0, 0))
+
