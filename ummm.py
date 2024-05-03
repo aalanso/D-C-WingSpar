@@ -203,8 +203,25 @@ def eval_setup(n_reinf, reinf_lengths, no_flange_len, n_bolts):
 
     print(mass(n_reinf, reinf_lengths, no_flange_len, n_bolts))
 
-    s_max_irb = 0.8 * ((-(0.9 * 2.1 * E) / get_bending_stress(M(1), I_xx(1, 0, [], no_flange_len ))) ** 0.5)
+    s_max_irb = 0.8 * ((-(0.9 * 2.1 * E) / (1.2*get_bending_stress(M(1), I_xx(1, 0, [], no_flange_len )))) ** 0.5)
     print("s_max_irb: [mm] {}".format(s_max_irb))
+
+
+
+    print("horizontal bolts for compressed side:")
+    bolt_pos = 155
+    n_b = 0
+    while bolt_pos < 2250:
+        print(bolt_pos)
+        n_b += 1
+        s = M(bolt_pos) * 74.2 * 1e-3 / (I_xx(bolt_pos, 0, [], no_flange_len) * 1e-12)
+        spacing_here = 1.5 * (((0.9 * 2.1 * E) / (1*abs(s))) ** 0.5)
+        bolt_pos += spacing_here
+
+    print(n_b)
+
+
+
 
 
 eval_setup(0, [], 2000, 60)
