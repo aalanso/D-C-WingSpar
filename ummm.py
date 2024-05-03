@@ -11,10 +11,10 @@ rho = 2780 #kg/m^3
 K_s = 8.1
 
 # ========= stolen
-M_A = 1108.394
+M_A = 1075.5
 R_A = 1045.064
-R_B = 2035 / 6  # 339.2N
-R_C = 4565 / 6  # 760.8N
+R_B = 4565 / 6 # 760.8N
+R_C = 2035 / 6 # 339.2N
 R_D = 5.6 * 9.81
 
 y = 75 / 2
@@ -28,6 +28,7 @@ def V(z):
         return R_A - R_B
     elif 1950 < z <= 2250:
         return R_A - R_B - R_C
+
 
 
 def M(z):
@@ -144,6 +145,7 @@ def eval_setup(n_reinf, reinf_lengths, no_flange_len, n_bolts):
     I = []
     Q = []
     tau_crit = []
+    V_int = []
 
     for z in range(0, 2250):
         I_here = I_xx(z, n_reinf, reinf_lengths, no_flange_len)
@@ -153,6 +155,8 @@ def eval_setup(n_reinf, reinf_lengths, no_flange_len, n_bolts):
         sigma_bending.append(get_bending_stress(M(z), I_here))
         I.append(I_here)
         Q.append(Q_here)
+        V_int.append(V(z))
+
 
 
     print("Max bending stress: {}".format(max(sigma_bending)))
@@ -172,7 +176,6 @@ def eval_setup(n_reinf, reinf_lengths, no_flange_len, n_bolts):
     fig, ax = plt.subplots()
     ax.plot(sigma_bending, label="sigma bending")
     ax.plot(np.full((2250), sigma_y), label="sigma_y")
-    print(np.full((1, 2250), sigma_y))
     plt.ylabel("Sigma Bending")
     plt.show()
 
@@ -186,10 +189,15 @@ def eval_setup(n_reinf, reinf_lengths, no_flange_len, n_bolts):
     plt.ylabel("Q_NA [mm3]")
     plt.show()
 
+    fig, ax = plt.subplots()
+    ax.plot(V_int)
+    plt.ylabel("V_int [N]")
+    plt.show()
+
     print(mass(n_reinf, reinf_lengths, no_flange_len, n_bolts))
 
 
-eval_setup(0, [], 1450, 60)
+eval_setup(0, [], 1500, 60)
 
 #
 # F_max_bolt = bolt_tau_max * 0.25*3.14159*(0.004**2)
