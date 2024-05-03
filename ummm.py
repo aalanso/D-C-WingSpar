@@ -22,22 +22,22 @@ RL = 900
 
 
 def V(z):
-    if 0 <= z <= 750:
+    if 0 <= z <= 720:
         return R_A
-    elif 750 < z <= 1950:
+    elif 720 < z <= 1920:
         return R_A - R_B
-    elif 1950 < z <= 2250:
+    elif 1920 < z <= 2250:
         return R_A - R_B - R_C
 
 
 
 def M(z):
-    if 0 <= z <= 750:
+    if 0 <= z <= 720:
         return (R_A * (z)) * mm - M_A
-    elif 750 < z <= 1950:
-        return (R_A * (z) - R_B * (z - 750)) * mm - M_A
-    elif 1950 < z <= 2250:
-        return (R_A * (z) - R_B * (z - 750) - R_C * (z - 1950)) * mm - M_A
+    elif 720 < z <= 1920:
+        return (R_A * (z) - R_B * (z - 720)) * mm - M_A
+    elif 1920 < z <= 2250:
+        return (R_A * (z) - R_B * (z - 720) - R_C * (z - 1920)) * mm - M_A
 
 
 # =======
@@ -146,6 +146,7 @@ def eval_setup(n_reinf, reinf_lengths, no_flange_len, n_bolts):
     Q = []
     tau_crit = []
     V_int = []
+    M_int = []
 
     for z in range(0, 2250):
         I_here = I_xx(z, n_reinf, reinf_lengths, no_flange_len)
@@ -156,10 +157,11 @@ def eval_setup(n_reinf, reinf_lengths, no_flange_len, n_bolts):
         I.append(I_here)
         Q.append(Q_here)
         V_int.append(V(z))
+        M_int.append(M(z))
 
 
 
-    print("Max bending stress: {}".format(max(sigma_bending)))
+    print("Max bending stress: {}".format(min(sigma_bending)))
     print("Max internal shear stress: {}".format(max(tau_int)))
 
     fig, ax = plt.subplots()
@@ -194,10 +196,27 @@ def eval_setup(n_reinf, reinf_lengths, no_flange_len, n_bolts):
     plt.ylabel("V_int [N]")
     plt.show()
 
+    fig, ax = plt.subplots()
+    ax.plot(M_int)
+    plt.ylabel("M_int [Nm]")
+    plt.show()
+
     print(mass(n_reinf, reinf_lengths, no_flange_len, n_bolts))
 
+    s_max_irb = 0.8 * ((-(0.9 * 2.1 * E) / get_bending_stress(M(1), I_xx(1, 0, [], no_flange_len ))) ** 0.5)
+    print("s_max_irb: [mm] {}".format(s_max_irb))
 
-eval_setup(0, [], 1500, 60)
+
+eval_setup(0, [], 2000, 60)
+
+# bolt shearing argumentation:
+# if thin walled, then no shear on top bolts but there will be shear so thats not true
+# if not thin walled, then there will be shear but spacing from it is like 5m
+# this section cant be analyzed with the current knowledge
+
+
+
+
 
 #
 # F_max_bolt = bolt_tau_max * 0.25*3.14159*(0.004**2)
@@ -208,8 +227,7 @@ eval_setup(0, [], 1500, 60)
 # print("V_int [N]: {}".format(V(1)))
 #
 #
-# s_max_irb = 0.8 * ( ( -(0.9*2.1*E) / get_bending_stress(M(1), I_xx(1, 0, [])) )**0.5)
-# print("s_max_irb: [mm] {}".format(s_max_irb))
+
 
 # def get_normal_flow_spacing(z):
 #     sm = M(z)*75/I_xx(z, 0, [])
@@ -224,5 +242,6 @@ eval_setup(0, [], 1500, 60)
 #
 #
 # print(get_normal_flow_spacing(1))
+
 
 
